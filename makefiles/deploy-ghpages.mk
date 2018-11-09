@@ -6,6 +6,20 @@ GIT_BRANCH = gh-pages
 GIT_PERSONAL_TOKEN = ed2c37ea02d3dac9f9f2679c17f0746b4aac2542
 GIT_BRANCH_DIR = $(PWD)/$(DEPLOY_DIR)/$(GIT_BRANCH)
 
+deploy.ghpages:
+	@echo 'Deploy to gh-pages...'
+	$(call mkdir_deploy_dir)
+	$(call git_init)
+	$(call git_config)
+	$(call git_add_remote_repository)
+	$(call create_branch_gh_pages)
+	$(call copy_files_to_deploy)
+	$(call git_add)
+	$(call create_commit)
+	$(call git_push)
+	$(call clean_workspace)
+	$(call show_deploy_url)
+
 define mkdir_deploy_dir
     @if [ ! -d "$(GIT_BRANCH_DIR)" ]; then mkdir $(GIT_BRANCH_DIR); fi
 endef
@@ -80,17 +94,4 @@ define show_deploy_url
     @echo ""
 endef
 
-deploy.ghpages:
-	@echo 'Deploy to gh-pages...'
-	$(call mkdir_deploy_dir)
-	$(call git_init)
-	$(call git_config)
-	$(call git_add_remote_repository)
-	$(call create_branch_gh_pages)
-	$(call copy_files_to_deploy)
-	$(call git_add)
-	$(call create_commit)
-	$(call git_push)
-	$(call clean_workspace)
-	$(call show_deploy_url)
 
