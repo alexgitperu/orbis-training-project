@@ -1,4 +1,5 @@
-include Makefile-task.mk
+include makefiles/task.mk
+include makefiles/deploy-ghpages.mk
 
 export NAME ?= Harry Potter local
 NAME_IMAGE ?= marlonric/orbis-training-docker
@@ -17,5 +18,11 @@ greet:
 resources:
 	@echo "Hola arecursos!"
 	@echo ${DOCKER_IMAGE}
+
+project_workspace:
+	docker create --rm --volumes-from workspace -w /app $(DOCKER_IMAGE)
+	docker cp ./ workspace:/app
+	docker run --rm --volumes-from workspace -w /app $(DOCKER_IMAGE)
+	docker cp workspace:/app ./
 
 .PHONY: resources
